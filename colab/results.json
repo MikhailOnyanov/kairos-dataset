@@ -1,0 +1,43 @@
+{
+  "split": "test",
+  "n_test": 17623,
+  "best": "blend",
+  "models": {
+    "base": {
+      "features": "baseline features, model.ipynb hyperparameters",
+      "test": {"macro_f1": 0.5446, "qwk": 0.4623, "accuracy": 0.5508}
+    },
+    "classifier": {
+      "features": "+meta+text+img",
+      "cv_macro_f1": 0.6581,
+      "cv_qwk": 0.5911,
+      "class_weights": {"below": 0.59, "typical": 1.0, "above": 0.55},
+      "test": {"macro_f1": 0.6494, "qwk": 0.5792, "accuracy": 0.6924},
+      "test_macro_f1_ci95_by_author": [0.6391, 0.6593]
+    },
+    "blend": {
+      "features": "+meta+text+img",
+      "score": "0.5 * z(regression on resid) + 0.5 * z(P_above - P_below), two cutoffs tuned on OOF",
+      "regressor_oof_r2": 0.579,
+      "cv_macro_f1": 0.6619,
+      "cv_qwk": 0.5999,
+      "test": {"macro_f1": 0.6551, "qwk": 0.5915, "accuracy": 0.6989},
+      "test_f1_by_class": {"below": 0.5384, "typical": 0.7591, "above": 0.6680},
+      "test_confusion_rows_truth_below_typical_above": [
+        [1845, 1672, 24],
+        [1419, 8244, 828],
+        [49, 1314, 2228]
+      ],
+      "test_macro_f1_ci95_by_author": [0.6449, 0.6652],
+      "test_diff_vs_classifier_ci95": [0.0011, 0.0100]
+    }
+  },
+  "ablation_cv_macro_f1": {
+    "base": 0.5535,
+    "+meta": 0.5891,
+    "+meta+text": 0.6298,
+    "+meta+text+img": 0.6328
+  },
+  "img_gain_by_fold": [0.0041, 0.0084, 0.0007, -0.0034, 0.0053],
+  "cv": "GroupKFold(5) by author on train; test scored once per model chosen on CV"
+}
